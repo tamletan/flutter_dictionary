@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/word_search_bloc.dart';
+import '../models/search_cache.dart';
 import '../models/word_detail.dart';
+import '../resources/repository.dart';
+import '../resources/word_api_provider.dart';
+import 'SearchForm.dart';
 import 'SearchScreen.dart';
 
 class RandomWords extends StatefulWidget {
@@ -14,28 +18,36 @@ class RandomWords extends StatefulWidget {
 class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _biggerFont = TextStyle(fontSize: 18.0);
+  final repository = Repository(
+    WordApiProvider(),
+    SearchCache(),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Word Generator'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              showSearch<WordDetail>(
-                context: context,
-                delegate: WordSearch(BlocProvider.of<WordSearchBloc>(context)),
-              );
-            },
-          )
-        ],
+//      appBar: AppBar(
+//        title: Text('Startup Word Generator'),
+//        actions: <Widget>[
+//          IconButton(
+//            icon: Icon(
+//              Icons.search,
+//              color: Colors.white,
+//            ),
+//            onPressed: () {
+//              showSearch<WordDetail>(
+//                context: context,
+//                delegate: WordSearch(BlocProvider.of<WordSearchBloc>(context)),
+//              );
+//            },
+//          )
+//        ],
+//      ),
+//      body: _buildSuggestions(),
+      body: BlocProvider(
+        create: (context) => WordSearchBloc(repository),
+        child: SearchForm(),
       ),
-      body: _buildSuggestions(),
     );
   }
 

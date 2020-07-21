@@ -1,16 +1,24 @@
 import 'dart:async';
 
-import 'package:flutter_dictionary/src/models/search_detail.dart';
-import 'package:flutter_dictionary/src/resources/word_api_provider.dart';
-
+import '../models/search_detail.dart';
 import '../models/word_detail.dart';
 
 class Repository {
-  final wordApiProvider = WordApiProvider();
+  final wordApiProvider;
+  final cache;
+
+  Repository(this.wordApiProvider, this.cache);
 
   Future<WordDetail> fetchWordAPI(String word) =>
       wordApiProvider.fetchWord(word);
 
-  Future<SearchDetail> searchWordAPI(String query) =>
-      wordApiProvider.searchWord(query);
+  Future<SearchDetail> searchWordAPI(String query) async {
+    if (cache.contains(query)) {
+      return cache.get(query);
+    } else {
+      final result = await wordApiProvider.searchWord(query);
+      cache.set(query, result);
+      return result;
+    }
+  }
 }

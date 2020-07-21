@@ -11,10 +11,7 @@ class App extends StatelessWidget {
       title: "Dictionary",
       theme: ThemeData.light(),
       home: SafeArea(
-        child: BlocProvider(
-          create: (_) => WordSearchBloc(),
-          child: RandomWords(),
-        ),
+        child: RandomWords(),
       ),
     );
   }

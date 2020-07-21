@@ -1,54 +1,34 @@
-import 'package:flutter_dictionary/src/models/search_detail.dart';
+import 'package:equatable/equatable.dart';
+import 'search_detail.dart';
 
-class WordSearchEvent {
-  final String query;
-
-  const WordSearchEvent(this.query);
+abstract class WordSearchState extends Equatable {
+  const WordSearchState();
 
   @override
-  String toString() => 'WordSearchEvent { query: $query }';
+  List<Object> get props => [];
 }
 
-class WordSearchState {
-  final bool isLoading;
-  final SearchDetail words;
-  final bool hasError;
+class SearchStateEmpty extends WordSearchState {}
 
-  const WordSearchState({this.isLoading, this.words, this.hasError});
+class SearchStateLoading extends WordSearchState {}
 
-  factory WordSearchState.initial() {
-    return WordSearchState(
-      words: null,
-      isLoading: false,
-      hasError: false,
-    );
-  }
+class SearchStateSuccess extends WordSearchState {
+  final SearchDetail items;
 
-  factory WordSearchState.loading() {
-    return WordSearchState(
-      words: null,
-      isLoading: true,
-      hasError: false,
-    );
-  }
-
-  factory WordSearchState.success(SearchDetail words) {
-    return WordSearchState(
-      words: words,
-      isLoading: false,
-      hasError: false,
-    );
-  }
-
-  factory WordSearchState.error() {
-    return WordSearchState(
-      words: null,
-      isLoading: false,
-      hasError: true,
-    );
-  }
+  const SearchStateSuccess(this.items);
 
   @override
-  String toString() =>
-      'WordSearchState {words: ${words?.printList()}, isLoading: $isLoading, hasError: $hasError }';
+  List<Object> get props => [items];
+
+  @override
+  String toString() => 'SearchStateSuccess { items: ${items.results.data.length} }';
+}
+
+class SearchStateError extends WordSearchState {
+  final String error;
+
+  const SearchStateError(this.error);
+
+  @override
+  List<Object> get props => [error];
 }

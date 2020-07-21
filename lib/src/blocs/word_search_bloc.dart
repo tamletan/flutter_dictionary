@@ -1,21 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dictionary/src/models/search_detail.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../models/word_detail.dart';
+import '../models/search_result_error.dart';
+import '../models/word_search_event.dart';
 import '../models/word_search_state.dart';
 import '../resources/repository.dart';
 
 class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
-  final _repository = Repository();
+  final Repository repository;
 
-  WordSearchBloc() : super(WordSearchState.initial());
+  WordSearchBloc(this.repository) : super(null);
 
-//  @override
-//  // ignore: must_call_super
-//  void onTransition(Transition<WordSearchEvent, WordSearchState> transition) {
-//    print(transition.toString());
-//  }
+  @override
+  WordSearchState get initialState => SearchStateEmpty();
+
+  @override
+  void onTransition(Transition<WordSearchEvent, WordSearchState> transition) {
+    print(transition.toString());
+    super.onTransition(transition);
+  }
 
   @override
   Stream<Transition<WordSearchEvent, WordSearchState>> transformEvents(
@@ -28,18 +32,24 @@ class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
   }
 
   @override
-  Stream<WordSearchState> mapEventToState(WordSearchEvent event) async* {
-    yield WordSearchState.loading();
-
-    try {
-      SearchDetail words = await _getSearchResults(event.query);
-      yield WordSearchState.success(words);
-    } catch (_) {
-      yield WordSearchState.error();
+  Stream<WordSearchState> mapEventToState(
+    WordSearchEvent event,
+  ) async* {
+    if (event is TextChanged) {
+      final String searchTerm = event.query;
+      if (searchTerm.isEmpty) {
+        yield SearchStateEmpty();
+      } else {
+        yield SearchStateLoading();
+        try {
+          final results = await repository.searchWordAPI(searchTerm);
+          yield SearchStateSuccess(results);
+        } catch (error) {
+          yield error is SearchResultError
+              ? SearchStateError(error.message)
+              : SearchStateError('something went wrong');
+        }
+      }
     }
-  }
-
-  Future<SearchDetail> _getSearchResults(String query) async {
-    return _repository.searchWordAPI(query);
   }
 }

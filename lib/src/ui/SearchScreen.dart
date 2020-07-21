@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dictionary/src/models/word_search_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../blocs/word_search_bloc.dart';
@@ -62,50 +63,50 @@ class WordSearch extends SearchDelegate<WordDetail> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (_recent != query && query.trim() != "") {
-      wordBloc.add(WordSearchEvent(query));
-      _recent = query;
-    }
-
-    if (query.trim() == "") {
-      return buildHistory();
-    }
-
-    return BlocBuilder(
-        bloc: wordBloc,
-        builder: (BuildContext context, WordSearchState state) {
-          if (state.hasError)
-            return Container(child: Center(child: Text('Error')));
-          if (state.words == null || state.isLoading)
-            return Center(child: CircularProgressIndicator());
-          return ListView.builder(
-              itemCount: state.words?.results?.data?.length ?? 1,
-              itemBuilder: (context, index) {
-                String word = state.words?.results?.data?.elementAt(index);
-                return (word == null)
-                    ? SizedBox()
-                    : ListTile(
-                        leading: Icon(Icons.search),
-                        trailing: buildTrailingIcon(word),
-                        title: RichText(
-                            text: TextSpan(children: <TextSpan>[
-                          TextSpan(
-                              text: word.contains(query) ? query : "",
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.black)),
-                          TextSpan(
-                              text: word.contains(query)
-                                  ? word.substring(query.length)
-                                  : word,
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.grey)),
-                        ])),
-                        onTap: () async {
-                          var selected = await openWordScreen(context, word);
-                          _history.insert(0, selected);
-                        });
-              });
-        });
+//    if (_recent != query && query.trim() != "") {
+//      wordBloc.add(WordSearchEvent(query));
+//      _recent = query;
+//    }
+//
+//    if (query.trim() == "") {
+//      return buildHistory();
+//    }
+//
+//    return BlocBuilder(
+//        bloc: wordBloc,
+//        builder: (BuildContext context, WordSearchState state) {
+//          if (state.hasError)
+//            return Container(child: Center(child: Text('Error')));
+//          if (state.words == null || state.isLoading)
+//            return Center(child: CircularProgressIndicator());
+//          return ListView.builder(
+//              itemCount: state.words?.results?.data?.length ?? 1,
+//              itemBuilder: (context, index) {
+//                String word = state.words?.results?.data?.elementAt(index);
+//                return (word == null)
+//                    ? SizedBox()
+//                    : ListTile(
+//                        leading: Icon(Icons.search),
+//                        trailing: buildTrailingIcon(word),
+//                        title: RichText(
+//                            text: TextSpan(children: <TextSpan>[
+//                          TextSpan(
+//                              text: word.contains(query) ? query : "",
+//                              style:
+//                                  TextStyle(fontSize: 18, color: Colors.black)),
+//                          TextSpan(
+//                              text: word.contains(query)
+//                                  ? word.substring(query.length)
+//                                  : word,
+//                              style:
+//                                  TextStyle(fontSize: 18, color: Colors.grey)),
+//                        ])),
+//                        onTap: () async {
+//                          var selected = await openWordScreen(context, word);
+//                          _history.insert(0, selected);
+//                        });
+//              });
+//        });
   }
 
   Widget buildHistory() {
