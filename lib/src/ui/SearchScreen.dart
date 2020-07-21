@@ -14,6 +14,7 @@ class WordSearch extends SearchDelegate<WordDetail> {
   final WordSearchBloc wordBloc;
   String _recent;
   List<String> _history;
+  final key = 'word_history';
 
   WordSearch(this.wordBloc);
 
@@ -61,7 +62,7 @@ class WordSearch extends SearchDelegate<WordDetail> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (_recent != query && query != "") {
+    if (_recent != query && query.trim() != "") {
       wordBloc.add(WordSearchEvent(query));
       _recent = query;
     }
@@ -73,38 +74,36 @@ class WordSearch extends SearchDelegate<WordDetail> {
     return BlocBuilder(
         bloc: wordBloc,
         builder: (BuildContext context, WordSearchState state) {
-          if (state.isLoading) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (state.hasError) {
+          if (state.hasError)
             return Container(child: Center(child: Text('Error')));
-          }
-          if (state.words.results.data?.length == 0) {
-            return Container(child: Center(child: Text('No Result')));
-          }
+          if (state.words == null || state.isLoading)
+            return Center(child: CircularProgressIndicator());
           return ListView.builder(
-              itemCount: state.words.results.data?.length,
+              itemCount: state.words?.results?.data?.length ?? 1,
               itemBuilder: (context, index) {
-                String word = state.words.results.data[index];
-                return ListTile(
-                  leading: Icon(Icons.search),
-                  title: RichText(
-                      text: TextSpan(children: <TextSpan>[
-                    TextSpan(
-                        text: word.contains(query) ? query : "",
-                        style: TextStyle(fontSize: 18, color: Colors.black)),
-                    TextSpan(
-                        text: word.contains(query)
-                            ? word.substring(query.length)
-                            : word,
-                        style: TextStyle(fontSize: 18, color: Colors.grey)),
-                  ])),
-                  onTap: () async {
-                    var selected = await openWordScreen(context, word);
-                    _history.insert(0, selected);
-                  },
-                  trailing: buildTrailingIcon(word),
-                );
+                String word = state.words?.results?.data?.elementAt(index);
+                return (word == null)
+                    ? SizedBox()
+                    : ListTile(
+                        leading: Icon(Icons.search),
+                        trailing: buildTrailingIcon(word),
+                        title: RichText(
+                            text: TextSpan(children: <TextSpan>[
+                          TextSpan(
+                              text: word.contains(query) ? query : "",
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.black)),
+                          TextSpan(
+                              text: word.contains(query)
+                                  ? word.substring(query.length)
+                                  : word,
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey)),
+                        ])),
+                        onTap: () async {
+                          var selected = await openWordScreen(context, word);
+                          _history.insert(0, selected);
+                        });
               });
         });
   }
@@ -113,27 +112,22 @@ class WordSearch extends SearchDelegate<WordDetail> {
     return FutureBuilder(
         future: _loadHistory(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError)
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return Center(child: CircularProgressIndicator());
+          if (snapshot.hasError)
             return Center(child: Text('Error: ${snapshot.error}'));
-          else if (_history.length == 0)
-            return Center(child: Text('No history'));
-          else
-            return ListView.builder(
-                itemCount: _history.length > 10 ? 10 : _history.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Icon(Icons.history),
-                    title: Text(_history[index]),
-                    onTap: () async {
-                      await openWordScreen(context, _history[index]);
-                    },
-                    trailing: buildTrailingIcon(_history[index]),
-                  );
-                });
+          if (_history.length == 0) return SizedBox();
+          return ListView.builder(
+              itemCount: (_history.length > 10) ? 10 : _history.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Icon(Icons.history),
+                  trailing: buildTrailingIcon(_history[index]),
+                  title: Text(_history[index]),
+                  onTap: () async =>
+                      await openWordScreen(context, _history[index]),
+                );
+              });
         });
   }
 
@@ -149,9 +143,7 @@ class WordSearch extends SearchDelegate<WordDetail> {
       angle: 270 * pi / 180,
       child: IconButton(
         icon: Icon(Icons.call_made),
-        onPressed: () => {
-          query = q,
-        },
+        onPressed: () => query = q,
       ),
     );
   }
@@ -159,18 +151,16 @@ class WordSearch extends SearchDelegate<WordDetail> {
   Future<List<String>> _loadHistory() async {
     if (_history == null) {
       final prefs = await SharedPreferences.getInstance();
-      final key = 'word_history';
       _history = prefs.getStringList(key) ?? <String>[];
-      print('read: $_history');
+//      print('read: $_history');
     }
     return _history;
   }
 
   Future _saveHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    final key = 'word_history';
     final value = _history.length > 10 ? _history.sublist(0, 10) : _history;
     prefs.setStringList(key, value);
-    print('saved $value');
+//    print('saved $value');
   }
 }
