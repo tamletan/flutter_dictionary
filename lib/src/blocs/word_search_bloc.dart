@@ -11,11 +11,11 @@ class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
 
   WordSearchBloc() : super(WordSearchState.initial());
 
-  @override
-  // ignore: must_call_super
-  void onTransition(Transition<WordSearchEvent, WordSearchState> transition) {
-    print(transition.toString());
-  }
+//  @override
+//  // ignore: must_call_super
+//  void onTransition(Transition<WordSearchEvent, WordSearchState> transition) {
+//    print(transition.toString());
+//  }
 
   @override
   Stream<Transition<WordSearchEvent, WordSearchState>> transformEvents(

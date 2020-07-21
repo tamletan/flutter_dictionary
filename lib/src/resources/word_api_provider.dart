@@ -15,11 +15,13 @@ class WordApiProvider {
   Future<WordDetail> fetchWord(String word) async {
     try {
       final response = await dio.get("/$word");
+
       dynamic pro = response.data['pronunciation'];
       if (pro is String){
         Map<String, dynamic> alter = {"all":"$pro",};
         response.data['pronunciation'] = alter;
       }
+
       WordDetail results = WordDetail.fromJson(response.data);
       return results;
     } catch (error, stacktrace) {

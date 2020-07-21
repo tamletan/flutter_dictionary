@@ -23,16 +23,15 @@ class _WordScreenState extends State<WordScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: bloc.getWord,
-      builder: (context, AsyncSnapshot<WordDetail> snapshot) {
-        if (snapshot.hasData) {
-          return buildListView(snapshot);
-        } else if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
-        }
-        return Center(child: CircularProgressIndicator());
-      },
-    );
+        stream: bloc.getWord,
+        builder: (context, AsyncSnapshot<WordDetail> snapshot) {
+          if (snapshot.hasData) {
+            return buildListView(snapshot);
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          }
+          return Center(child: CircularProgressIndicator());
+        });
   }
 
   Widget buildListView(AsyncSnapshot<WordDetail> snapshot) {
@@ -43,10 +42,11 @@ class _WordScreenState extends State<WordScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-            title: Text(
-          "${snapshot.data.word}   /${snapshot.data.pronunciation?.all}/",
-          style: TextStyle(fontSize: 25, color: Colors.white),
-        )),
+          title: Text(
+            "${snapshot.data.word}   /${snapshot.data.pronunciation?.all}/",
+            style: TextStyle(fontSize: 25, color: Colors.white),
+          ),
+        ),
         body: (snapshot.data.results?.length == 0)
             ? SingleChildScrollView(
                 child: Center(
@@ -61,32 +61,31 @@ class _WordScreenState extends State<WordScreen> {
 
   ListView buildWordView(AsyncSnapshot<WordDetail> snapshot) {
     return ListView.separated(
-      separatorBuilder: (context, index) => Divider(
-        height: 5,
-        color: Colors.black,
-        thickness: 5,
-      ),
-      itemCount: snapshot.data.results.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ListBody(
-          children: <Widget>[
-            Container(
-              color: Colors.white,
-              padding: EdgeInsets.all(10),
-              child: ListTile(
-                title: Text(
-                  snapshot.data.results[index].definition ?? "null",
-                  style: _biggerFont,
+        separatorBuilder: (context, index) => Divider(
+              height: 5,
+              color: Colors.black,
+              thickness: 5,
+            ),
+        itemCount: snapshot.data.results.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListBody(
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+                padding: EdgeInsets.all(10),
+                child: ListTile(
+                  title: Text(
+                    snapshot.data.results[index].definition ?? "null",
+                    style: _biggerFont,
+                  ),
+                  subtitle: Text(
+                    snapshot.data.results[index].partOfSpeech ?? "null",
+                    style: TextStyle(fontSize: 15, color: Colors.deepOrange),
+                  ),
                 ),
-                subtitle: Text(
-                  snapshot.data.results[index].partOfSpeech ?? "null",
-                  style: TextStyle(fontSize: 15, color: Colors.deepOrange),
-                ),
-              ),
-            )
-          ],
-        );
-      },
-    );
+              )
+            ],
+          );
+        });
   }
 }

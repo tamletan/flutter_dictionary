@@ -123,7 +123,7 @@ class WordSearch extends SearchDelegate<WordDetail> {
             return Center(child: Text('No history'));
           else
             return ListView.builder(
-                itemCount: _history.length,
+                itemCount: _history.length > 10 ? 10 : _history.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: Icon(Icons.history),
@@ -160,7 +160,7 @@ class WordSearch extends SearchDelegate<WordDetail> {
     if (_history == null) {
       final prefs = await SharedPreferences.getInstance();
       final key = 'word_history';
-      _history = prefs.getStringList(key) ?? [];
+      _history = prefs.getStringList(key) ?? <String>[];
       print('read: $_history');
     }
     return _history;
@@ -169,7 +169,7 @@ class WordSearch extends SearchDelegate<WordDetail> {
   Future _saveHistory() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'word_history';
-    final value = _history.sublist(0, 10);
+    final value = _history.length > 10 ? _history.sublist(0, 10) : _history;
     prefs.setStringList(key, value);
     print('saved $value');
   }
