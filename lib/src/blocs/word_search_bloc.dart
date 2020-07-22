@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,7 +11,6 @@ class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
 
   WordSearchBloc(this.repository) : super(null);
 
-  @override
   WordSearchState get initialState => SearchStateEmpty();
 
   @override
