@@ -1,5 +1,5 @@
-import 'package:equatable/equatable.dart';
-import 'search_detail.dart';
+import 'package:equatable/equatable.dart' show Equatable;
+import '../search/search_detail.dart' show SearchDetail;
 
 abstract class WordSearchState extends Equatable {
   const WordSearchState();

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 
 import '../blocs/word_search_bloc.dart';
-import '../models/search_cache.dart';
+import '../models/search/search_cache.dart';
 import '../resources/repository.dart';
 import '../resources/word_api_provider.dart';
-import 'SearchForm.dart';
+import 'search/SearchForm.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,13 +17,14 @@ class _HomeScreenState extends State<HomeScreen> {
     WordApiProvider(),
     SearchCache(),
   );
+  final textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Search')),
       body: BlocProvider(
-        create: (context) => WordSearchBloc(repository),
+        create: (context) => WordSearchBloc(repository, textController),
         child: SearchForm(),
       ),
     );

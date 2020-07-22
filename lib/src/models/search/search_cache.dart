@@ -1,4 +1,4 @@
-import 'search_detail.dart';
+import '../search/search_detail.dart' show SearchDetail;
 
 class SearchCache {
   final _cache = <String, SearchDetail>{};

@@ -1,15 +1,18 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/cupertino.dart' show TextEditingController;
+import 'package:flutter_bloc/flutter_bloc.dart'
+    show Bloc, Transition, TransitionFunction;
+import 'package:rxdart/rxdart.dart' show DebounceExtensions;
 
-import '../models/search_result_error.dart';
-import '../models/word_search_event.dart';
-import '../models/word_search_state.dart';
+import '../models/search/search_result_error.dart';
+import '../models/search/word_search_event.dart';
+import '../models/search/word_search_state.dart';
 import '../resources/repository.dart';
 
 class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
   final Repository repository;
+  final TextEditingController textController;
 
-  WordSearchBloc(this.repository) : super(null);
+  WordSearchBloc(this.repository, this.textController) : super(null);
 
   WordSearchState get initialState => SearchStateEmpty();
 

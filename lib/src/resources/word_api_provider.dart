@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' show Dio;
 
-import '../models/search_detail.dart';
-import '../models/word_detail.dart';
+import '../models/search/search_detail.dart' show SearchDetail;
+import '../models/word_detail.dart' show WordDetail;
 import 'utils.dart';
 
 class WordApiProvider {
@@ -17,8 +17,10 @@ class WordApiProvider {
       final response = await dio.get("/$word");
 
       dynamic pro = response.data['pronunciation'];
-      if (pro is String){
-        Map<String, dynamic> alter = {"all":"$pro",};
+      if (pro is String) {
+        Map<String, dynamic> alter = {
+          "all": "$pro",
+        };
         response.data['pronunciation'] = alter;
       }
 

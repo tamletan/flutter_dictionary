@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter_dictionary/src/models/search_cache.dart';
-import 'package:flutter_dictionary/src/resources/word_api_provider.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/rxdart.dart' show PublishSubject;
 
-import '../models/word_detail.dart';
+import '../models/search/search_cache.dart';
+import '../models/word_detail.dart' show WordDetail;
 import '../resources/repository.dart';
+import '../resources/word_api_provider.dart';
 
 class WordBloc {
   final _repository = Repository(

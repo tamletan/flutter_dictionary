@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import '../models/search_detail.dart';
-import '../models/word_detail.dart';
+import '../models/search/search_detail.dart' show SearchDetail;
+import '../models/word_detail.dart' show WordDetail;
 
 class Repository {
   final wordApiProvider;

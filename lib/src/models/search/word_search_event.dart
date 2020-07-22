@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart' show Equatable;
 
 abstract class WordSearchEvent extends Equatable {
   const WordSearchEvent();

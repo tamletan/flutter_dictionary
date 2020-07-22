@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../blocs/word_bloc.dart';
-import '../models/word_detail.dart';
+import '../blocs/word_bloc.dart' show bloc;
+import '../models/word_detail.dart' show WordDetail;
 
 class WordScreen extends StatefulWidget {
   WordScreen({Key key, @required this.word}) : super(key: key);
