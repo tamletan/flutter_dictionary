@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
 class HistoryWord {
-  int id;
   String _word;
   String _all;
   String _noun;
@@ -36,10 +35,6 @@ class HistoryWord {
     map["verb"] = _verb;
     return map;
   }
-
-  void setWordId(int id) {
-    this.id = id;
-  }
 }
 
 class HistoryDetail {
@@ -51,7 +46,7 @@ class HistoryDetail {
   String _hasTypes;
   String _derivation;
   String _examples;
-  int FK_word_id;
+  String FK_word;
 
   HistoryDetail({String definition,
     String partOfSpeech,
@@ -109,8 +104,4 @@ class HistoryDetail {
   String get partOfSpeech => _partOfSpeech;
 
   String get definition => _definition;
-
-  void setWordId(int id) {
-    this.FK_word_id = id;
-  }
 }

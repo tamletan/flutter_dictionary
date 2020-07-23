@@ -44,42 +44,38 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context, snapshot) {
             if (snapshot.hasError) print(snapshot.error);
             return snapshot.hasData
-                ? UserList(snapshot.data)
+                ? buildListView(snapshot.data)
                 : Center(child: new CircularProgressIndicator());
           }),
     );
   }
 
-  Widget buildSearch() {
-    return BlocProvider(
-      create: (context) => WordSearchBloc(textController),
-      child: SearchBar(),
-    );
-  }
-}
-
-class UserList extends StatelessWidget {
-  final List<HistoryWord> words;
-
-  UserList(this.words, {Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  ListView buildListView(List<HistoryWord> words) {
     return ListView.builder(
         itemCount: words == null ? 0 : words.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             title: Text(words[index].word),
             subtitle: Text("/${words[index].all}/"),
-            onTap: () => Navigator.push(
-                context,
-                CupertinoPageRoute(
-                    builder: (_) => SafeArea(
-                            child: WordScreen(
-                          word: words[index].word,
-                          isSaved: true,
-                        )))),
+            onTap: () async {
+              await Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (_) => SafeArea(
+                              child: WordScreen(
+                            word: words[index].word,
+                            isSaved: true,
+                          ))));
+              homeBloc.fetchWordBloc();
+            },
           );
         });
+  }
+
+  Widget buildSearch() {
+    return BlocProvider(
+      create: (context) => WordSearchBloc(textController),
+      child: SearchBar(homeBloc: homeBloc),
+    );
   }
 }

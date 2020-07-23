@@ -10,15 +10,11 @@ import 'word_db.dart';
 class DatabaseHelper {
   Database _database;
   DatabaseConfig _databaseConfig;
+  List<HistoryWord> _list;
 
   DatabaseHelper() {
     _databaseConfig =
         DatabaseConfig(1, "Favor_Word", AppDatabaseMigrationListener());
-    _init();
-  }
-
-  void _init() async {
-    await open();
   }
 
   Future<void> open() async {
@@ -57,8 +53,7 @@ class DatabaseHelper {
     return res;
   }
 
-  Future<List<HistoryWord>> getWord() async {
-    await this.open();
+  Future<List<HistoryWord>> getWords() async {
     List<Map> list = await _database.rawQuery('SELECT * FROM Word');
     List<HistoryWord> lists = new List();
     for (int i = 0; i < list.length; i++) {
@@ -67,22 +62,30 @@ class DatabaseHelper {
           all: list[i]["p_all"],
           noun: list[i]["noun"],
           verb: list[i]["verb"]);
-      user.setWordId(list[i]["id"]);
       lists.add(user);
     }
     print(lists.length);
+    _list = lists;
     return lists;
   }
 
   Future<int> deleteWords(HistoryWord word) async {
     int res =
-        await _database.rawDelete('DELETE FROM Word WHERE id = ?', [word.id]);
+        await _database.rawDelete('DELETE FROM Word WHERE word = ?', [word.word]);
     return res;
   }
 
   Future<bool> update(HistoryWord word) async {
     int res = await _database.update("Word", word.toMap(),
-        where: "id = ?", whereArgs: <int>[word.id]);
+        where: "word = ?", whereArgs: <String>[word.word]);
     return res > 0 ? true : false;
+  }
+
+  bool contains(String word){
+    for (HistoryWord i in _list){
+      if (i.word == word)
+        return true;
+    }
+    return false;
   }
 }

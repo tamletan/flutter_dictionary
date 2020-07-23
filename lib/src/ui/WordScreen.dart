@@ -43,10 +43,15 @@ class _WordScreenState extends State<WordScreen> {
   Widget buildListView(AsyncSnapshot<WordDetail> snapshot) {
     return WillPopScope(
       onWillPop: () async {
-        repository.dbHelper.saveWord(HistoryWord(
+        var w = HistoryWord(
           word: snapshot.data.word,
           all: snapshot.data.pronunciation?.all,
-        ));
+        );
+        bool a = repository.dbHelper.contains(snapshot.data.word);
+        if (!a && widget.isSaved)
+          repository.dbHelper.saveWord(w);
+        if (a && !(widget.isSaved))
+          repository.dbHelper.deleteWords(w);
         Navigator.pop(context, snapshot.data);
         return true;
       },
@@ -61,9 +66,11 @@ class _WordScreenState extends State<WordScreen> {
               key: Key("fav"),
               icon: widget.isSaved ? Icon(Icons.star) : Icon(Icons.star_border),
               onPressed: () {
+                print(widget.isSaved);
                 setState(() {
                   widget.isSaved = !(widget.isSaved);
                 });
+                print(widget.isSaved);
               },
             )
           ],

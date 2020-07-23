@@ -27,7 +27,7 @@ class Repository {
     }
   }
 
-  Future<List<HistoryWord>> getWordDB() async => await dbHelper.getWord();
+  Future<List<HistoryWord>> getWordDB() async => await dbHelper.getWords();
 }
 
 final repository =
