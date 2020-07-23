@@ -9,18 +9,17 @@ import '../models/search/word_search_state.dart';
 import '../resources/repository.dart';
 
 class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
-  final Repository repository;
   final TextEditingController textController;
 
-  WordSearchBloc(this.repository, this.textController) : super(null);
+  WordSearchBloc(this.textController) : super(null);
 
   WordSearchState get initialState => SearchStateEmpty();
 
-  @override
-  void onTransition(Transition<WordSearchEvent, WordSearchState> transition) {
-    print(transition.toString());
-    super.onTransition(transition);
-  }
+//  @override
+//  void onTransition(Transition<WordSearchEvent, WordSearchState> transition) {
+//    print(transition.toString());
+//    super.onTransition(transition);
+//  }
 
   @override
   Stream<Transition<WordSearchEvent, WordSearchState>> transformEvents(

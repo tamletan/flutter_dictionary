@@ -1,16 +1,21 @@
 import 'dart:async';
 
+import '../models/database/db_helper.dart';
+import '../models/database/word_db.dart' show HistoryWord;
+import '../models/search/search_cache.dart';
 import '../models/search/search_detail.dart' show SearchDetail;
 import '../models/word_detail.dart' show WordDetail;
+import '../resources/word_api_provider.dart';
 
 class Repository {
-  final wordApiProvider;
-  final cache;
+  WordApiProvider wordApiProvider;
+  SearchCache cache;
+  DatabaseHelper dbHelper;
 
-  Repository(this.wordApiProvider, this.cache);
+  Repository(this.wordApiProvider, this.cache, this.dbHelper);
 
-  Future<WordDetail> fetchWordAPI(String word) =>
-      wordApiProvider.fetchWord(word);
+  Future<WordDetail> fetchWordAPI(String word) async =>
+      await wordApiProvider.fetchWord(word);
 
   Future<SearchDetail> searchWordAPI(String query) async {
     if (cache.contains(query)) {
@@ -21,4 +26,9 @@ class Repository {
       return result;
     }
   }
+
+  Future<List<HistoryWord>> getWordDB() async => await dbHelper.getWord();
 }
+
+final repository =
+    Repository(WordApiProvider(), SearchCache(), DatabaseHelper());

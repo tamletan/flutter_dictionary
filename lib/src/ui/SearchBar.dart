@@ -18,6 +18,7 @@ class SearchBar extends StatefulWidget {
 class SearchBarState extends State<SearchBar> {
   WordSearchBloc _wordSearchBloc;
   final FocusNode _focusNode = FocusNode();
+  final _style = TextStyle(color: Colors.white, fontSize: 18);
 
   OverlayEntry _overlayEntry;
 
@@ -37,7 +38,7 @@ class SearchBarState extends State<SearchBar> {
 
   @override
   void dispose() {
-//    _wordSearchBloc.textController.dispose();
+    _wordSearchBloc.textController.dispose();
     super.dispose();
   }
 
@@ -50,7 +51,7 @@ class SearchBarState extends State<SearchBar> {
         focusNode: this._focusNode,
         autocorrect: false,
         onChanged: (text) => _wordSearchBloc.add(TextChanged(query: text)),
-        style: TextStyle(color: Colors.white, fontSize: 18),
+        style: _style,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search, color: Colors.white),
           suffixIcon: GestureDetector(
@@ -59,7 +60,7 @@ class SearchBarState extends State<SearchBar> {
           ),
           border: InputBorder.none,
           hintText: 'Enter a search term',
-          hintStyle: TextStyle(color: Colors.white, fontSize: 18),
+          hintStyle: _style,
         ),
       ),
     );
@@ -104,23 +105,22 @@ class SearchBarState extends State<SearchBar> {
       shrinkWrap: true,
       padding: EdgeInsets.all(0),
       itemCount: items.length,
-      itemBuilder: (BuildContext context, int index) {
-        return buildItem(items[index], index, context);
-      },
+      itemBuilder: (BuildContext context, int index) =>
+          buildItem(items[index], index, context),
     );
   }
 
   Widget buildItem(String item, int index, BuildContext context) {
     return Ink(
-      color: Colors.blue,
+      color: Color(0xFF02BB9F),
       child: ListTile(
-        title: Text(item, style: TextStyle(color: Colors.white, fontSize: 18)),
+        title: Text(item, style: _style),
         leading: Icon(Icons.search, color: Colors.white),
         trailing: buildTrailingIcon(item, context),
         onTap: () => Navigator.push(
             context,
             CupertinoPageRoute(
-                builder: (_) => SafeArea(child: WordScreen(word: item)))),
+                builder: (_) => SafeArea(child: WordScreen(word: item, isSaved: false,)))),
       ),
     );
   }
