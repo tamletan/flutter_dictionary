@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart' show Equatable;
-import '../search/search_detail.dart' show SearchDetail;
+import '../search/search_detail.dart' show SearchJson;
 
 abstract class WordSearchState extends Equatable {
   const WordSearchState();
@@ -13,7 +13,7 @@ class SearchStateEmpty extends WordSearchState {}
 class SearchStateLoading extends WordSearchState {}
 
 class SearchStateSuccess extends WordSearchState {
-  final SearchDetail items;
+  final SearchJson items;
 
   const SearchStateSuccess(this.items);
 

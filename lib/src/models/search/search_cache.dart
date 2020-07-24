@@ -1,11 +1,11 @@
-import '../search/search_detail.dart' show SearchDetail;
+import '../search/search_detail.dart' show SearchJson;
 
 class SearchCache {
-  final _cache = <String, SearchDetail>{};
+  final _cache = <String, SearchJson>{};
 
-  SearchDetail get(String term) => _cache[term];
+  SearchJson get(String term) => _cache[term];
 
-  void set(String term, SearchDetail detail) => _cache[term] = detail;
+  void set(String term, SearchJson detail) => _cache[term] = detail;
 
   bool contains(String term) => _cache.containsKey(term);
 

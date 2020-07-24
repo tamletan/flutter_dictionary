@@ -4,12 +4,12 @@ import 'package:rxdart/rxdart.dart';
 import '../resources/repository.dart';
 
 class HomeBloc {
-  final _wordFetcher = PublishSubject<List<HistoryWord>>();
+  final _wordFetcher = PublishSubject<List<WordDB>>();
 
-  Stream<List<HistoryWord>> get getWord => _wordFetcher.stream;
+  Stream<List<WordDB>> get getWord => _wordFetcher.stream;
 
   fetchWordBloc() async {
-    List<HistoryWord> data = await repository.getWordDB();
+    List<WordDB> data = await repository.getWordDB();
     _wordFetcher.sink.add(data);
   }
 
@@ -17,3 +17,5 @@ class HomeBloc {
     _wordFetcher.close();
   }
 }
+
+final homeBloc = HomeBloc();

@@ -23,9 +23,8 @@ class AppDatabaseMigrationListener implements DatabaseMigrationListener {
 
   Future<void> _createDatabase(Database db, int version) async {
     if (VERSION_1 == version) {
-      await db.execute(
-          "CREATE TABLE Word(id INTEGER PRIMARY KEY,"
-              " word TEXT, p_all TEXT, noun TEXT, verb TEXT)");
+      await db.execute("CREATE TABLE Word(id INTEGER PRIMARY KEY AUTOINCREMENT,"
+          " word TEXT, pronunciation TEXT, results TEXT)");
     }
   }
 }

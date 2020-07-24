@@ -10,7 +10,7 @@ import 'word_db.dart';
 class DatabaseHelper {
   Database _database;
   DatabaseConfig _databaseConfig;
-  List<HistoryWord> _list;
+  List<WordDB> _list;
 
   DatabaseHelper() {
     _databaseConfig =
@@ -48,43 +48,48 @@ class DatabaseHelper {
 
   Database get database => _database;
 
-  Future<int> saveWord(HistoryWord word) async {
-    int res = await _database.insert("Word", word.toMap());
-    return res;
+  Future<int> saveWord(WordDB word) async {
+    int index = await _database.insert("Word", word.toMap());
+    return index;
   }
 
-  Future<List<HistoryWord>> getWords() async {
+  Future<List<WordDB>> getWords() async {
     List<Map> list = await _database.rawQuery('SELECT * FROM Word');
-    List<HistoryWord> lists = new List();
+    List<WordDB> lists = new List();
     for (int i = 0; i < list.length; i++) {
-      var user = new HistoryWord(
+      var user = new WordDB(
+          id: list[i]["id"],
           word: list[i]["word"],
-          all: list[i]["p_all"],
-          noun: list[i]["noun"],
-          verb: list[i]["verb"]);
+          pronunciation: list[i]["pronunciation"],
+          results: list[i]["results"]);
       lists.add(user);
     }
-    print(lists.length);
     _list = lists;
     return lists;
   }
 
-  Future<int> deleteWords(HistoryWord word) async {
-    int res =
-        await _database.rawDelete('DELETE FROM Word WHERE word = ?', [word.word]);
+  Future<int> deleteWords(WordDB word) async {
+    int res = await _database
+        .rawDelete('DELETE FROM Word WHERE word = ?', [word.word]);
     return res;
   }
 
-  Future<bool> update(HistoryWord word) async {
+  Future<bool> update(WordDB word) async {
     int res = await _database.update("Word", word.toMap(),
         where: "word = ?", whereArgs: <String>[word.word]);
     return res > 0 ? true : false;
   }
 
-  bool contains(String word){
-    for (HistoryWord i in _list){
-      if (i.word == word)
-        return true;
+  WordDB getWord(String word) {
+    for (WordDB i in _list) {
+      if (i.word == word) return i;
+    }
+    return null;
+  }
+
+  bool contains(String word) {
+    for (WordDB i in _list) {
+      if (i.word == word) return true;
     }
     return false;
   }

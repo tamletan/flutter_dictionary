@@ -1,25 +1,31 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'word_detail.g.dart';
+part 'word_json.g.dart';
 
 @JsonSerializable()
-class WordDetail {
+class WordJson {
   @JsonKey(nullable: false)
   String word;
   Pronunciation pronunciation;
   List<Result> results = [];
+  bool isFavor;
 
-  WordDetail(this.word, {this.pronunciation, List<Result> results})
+  WordJson(this.word, {this.pronunciation, List<Result> results})
       : results = results ?? <Result>[];
 
-  factory WordDetail.fromJson(Map<String, dynamic> json) =>
-      _$WordDetailFromJson(json);
+  factory WordJson.fromJson(Map<String, dynamic> json) =>
+      _$WordJsonFromJson(json);
 
-  Map<String, dynamic> toJson() => _$WordDetailToJson(this);
+  Map<String, dynamic> toJson() => _$WordJsonToJson(this);
 
-  static Future<WordDetail> withError(String errorValue) {
+  static Future<WordJson> withError(String errorValue) {
     return null;
   }
+
+  void setFavor(bool f) {
+    isFavor = f;
+  }
+
 }
 
 @JsonSerializable()

@@ -3,17 +3,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'search_detail.g.dart';
 
 @JsonSerializable()
-class SearchDetail {
+class SearchJson {
   SearchResult results;
 
-  SearchDetail({this.results});
+  SearchJson({this.results});
 
-  factory SearchDetail.fromJson(Map<String, dynamic> json) =>
-      _$SearchDetailFromJson(json);
+  factory SearchJson.fromJson(Map<String, dynamic> json) =>
+      _$SearchJsonFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SearchDetailToJson(this);
+  Map<String, dynamic> toJson() => _$SearchJsonToJson(this);
 
-  static Future<SearchDetail> withError(String errorValue) {
+  static Future<SearchJson> withError(String errorValue) {
     return null;
   }
 

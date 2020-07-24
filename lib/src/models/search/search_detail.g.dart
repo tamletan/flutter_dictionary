@@ -6,15 +6,15 @@ part of 'search_detail.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SearchDetail _$SearchDetailFromJson(Map<String, dynamic> json) {
-  return SearchDetail(
+SearchJson _$SearchJsonFromJson(Map<String, dynamic> json) {
+  return SearchJson(
     results: json['results'] == null
         ? null
         : SearchResult.fromJson(json['results'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$SearchDetailToJson(SearchDetail instance) =>
+Map<String, dynamic> _$SearchJsonToJson(SearchJson instance) =>
     <String, dynamic>{
       'results': instance.results,
     };

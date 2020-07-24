@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'word_detail.dart';
+part of 'word_json.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-WordDetail _$WordDetailFromJson(Map<String, dynamic> json) {
-  return WordDetail(
+WordJson _$WordJsonFromJson(Map<String, dynamic> json) {
+  return WordJson(
     json['word'] as String,
     pronunciation: json['pronunciation'] == null
         ? null
@@ -19,8 +19,7 @@ WordDetail _$WordDetailFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$WordDetailToJson(WordDetail instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$WordJsonToJson(WordJson instance) => <String, dynamic>{
       'word': instance.word,
       'pronunciation': instance.pronunciation,
       'results': instance.results,

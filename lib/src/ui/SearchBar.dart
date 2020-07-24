@@ -1,21 +1,14 @@
 import 'dart:math' show pi;
 
-import 'package:flutter/cupertino.dart' show CupertinoPageRoute;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, BlocBuilder;
-import 'package:flutter_dictionary/src/blocs/home_bloc.dart';
 
 import '../blocs/word_search_bloc.dart';
 import '../models/search/word_search_event.dart';
 import '../models/search/word_search_state.dart'
     show SearchStateSuccess, WordSearchState;
-import 'WordScreen.dart';
 
 class SearchBar extends StatefulWidget {
-  HomeBloc homeBloc;
-
-  SearchBar({Key key, this.homeBloc}) : super(key: key);
-
   @override
   State<SearchBar> createState() => SearchBarState();
 }
@@ -123,15 +116,8 @@ class SearchBarState extends State<SearchBar> {
         leading: Icon(Icons.search, color: Colors.white),
         trailing: buildTrailingIcon(item, context),
         onTap: () async {
-          await Navigator.push(
-              context,
-              CupertinoPageRoute(
-                  builder: (_) => SafeArea(
-                          child: WordScreen(
-                        word: item,
-                        isSaved: false,
-                      ))));
-          widget.homeBloc.fetchWordBloc();
+          await Navigator.pushNamed(context, '/word',
+              arguments: {'word': '$item'});
         },
       ),
     );

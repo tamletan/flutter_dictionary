@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dictionary/src/blocs/home_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../blocs/home_bloc.dart';
 import '../blocs/word_search_bloc.dart';
-import '../models/database/word_db.dart' show HistoryWord;
 import 'SearchBar.dart' show SearchBar;
-import 'WordScreen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -19,7 +17,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final textController = TextEditingController();
-  final homeBloc = HomeBloc();
 
   @override
   void initState() {
@@ -35,47 +32,42 @@ class _MyHomePageState extends State<MyHomePage> {
         title: logo,
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(58.0),
+          preferredSize: Size.fromHeight(48.0),
           child: buildSearch(),
         ),
       ),
-      body: StreamBuilder(
-          stream: homeBloc.getWord,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            return snapshot.hasData
-                ? buildListView(snapshot.data)
-                : Center(child: new CircularProgressIndicator());
-          }),
+      body: buildHorizontalListView(),
     );
-  }
-
-  ListView buildListView(List<HistoryWord> words) {
-    return ListView.builder(
-        itemCount: words == null ? 0 : words.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(words[index].word),
-            subtitle: Text("/${words[index].all}/"),
-            onTap: () async {
-              await Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (_) => SafeArea(
-                              child: WordScreen(
-                            word: words[index].word,
-                            isSaved: true,
-                          ))));
-              homeBloc.fetchWordBloc();
-            },
-          );
-        });
   }
 
   Widget buildSearch() {
     return BlocProvider(
       create: (context) => WordSearchBloc(textController),
-      child: SearchBar(homeBloc: homeBloc),
+      child: SearchBar(),
+    );
+  }
+
+  Widget buildHorizontalListView() {
+    return ListView(
+      padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      children: <Widget>[
+        Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          color: Theme.of(context).primaryColorDark,
+          child: ListTile(
+            title: Text(
+              "Favorite",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            onTap: () => Navigator.pushNamed(context, '/favor'),
+          ),
+        )
+      ],
     );
   }
 }
