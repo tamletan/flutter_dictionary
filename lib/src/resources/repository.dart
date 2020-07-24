@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../models/database/db_helper.dart';
+import 'db_helper.dart';
 import '../models/database/word_db.dart' show WordDB;
 import '../models/search/search_cache.dart';
 import '../models/search/search_detail.dart' show SearchJson;

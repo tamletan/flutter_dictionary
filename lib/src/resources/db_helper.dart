@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'db_config.dart';
-import 'db_migration_listener.dart';
-import 'word_db.dart';
+import '../models/database/db_config.dart';
+import '../models/database/db_migration_listener.dart';
+import '../models/database/word_db.dart';
 
 class DatabaseHelper {
   Database _database;
