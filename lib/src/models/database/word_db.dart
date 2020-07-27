@@ -27,12 +27,10 @@ class WordDB {
   }
 
   WordJson toWordJson() {
-    var jsonResults;
-    if (this._results != "") jsonResults = json.decode(this._results);
     return WordJson(
       this._word,
       pronunciation: Pronunciation.fromJson(json.decode(this._pronunciation)),
-      results: (jsonResults as List)
+      results: (json.decode(this._results) as List)
           ?.map((e) =>
               e == null ? null : Result.fromJson(e as Map<String, dynamic>))
           ?.toList(),

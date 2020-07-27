@@ -11,14 +11,7 @@ class WordBloc {
   Stream<WordJson> get getWord => _wordFetcher.stream;
 
   fetchWordBloc(String word) async {
-    WordJson data;
-    if (repository.dbHelper.contains(word)) {
-      data = await repository.dbHelper.getWord(word).toWordJson();
-      data.setFavor(true);
-    } else {
-      data = await repository.fetchWordAPI(word);
-      data.setFavor(false);
-    }
+    WordJson data = await repository.fetchWord(word);
     _wordFetcher.sink.add(data);
   }
 

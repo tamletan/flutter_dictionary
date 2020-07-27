@@ -15,9 +15,6 @@ class Repository {
 
   Repository(this.wordApiProvider, this.cache, this.dbHelper);
 
-  Future<WordJson> fetchWordAPI(String word) async =>
-      await wordApiProvider.fetchWord(word);
-
   Future<SearchJson> searchWordAPI(String query) async {
     if (cache.contains(query)) {
       return cache.get(query);
@@ -36,6 +33,18 @@ class Repository {
 
   void deleteWordsFromDB(WordDB w) {
     dbHelper.deleteWords(word_recent);
+  }
+
+  Future<WordJson> fetchWord(String word) async {
+    WordJson data;
+    if (dbHelper.contains(word)) {
+      data = await dbHelper.getWord(word).toWordJson();
+      data.setFavor(true);
+    } else {
+      data = await wordApiProvider.fetchWord(word);
+      data.setFavor(false);
+    }
+    return data;
   }
 }
 

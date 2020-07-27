@@ -18,20 +18,17 @@ class WordApiProvider {
   Future<WordJson> fetchWord(String word) async {
     try {
       final response = await dio.get("/$word");
+      dynamic pro = response.data['pronunciation'];
+      if (pro is! Map<String, dynamic>) {
+        Map<String, dynamic> alter = {"all": "$pro"};
+        response.data['pronunciation'] = alter;
+      }
       repository.word_recent = WordDB(
           word: response.data['word'],
           pronunciation: json.encode(response.data['pronunciation']),
           results: response.data['results'] == null
-              ? ""
+              ? "[]"
               : json.encode(response.data['results']));
-
-      dynamic pro = response.data['pronunciation'];
-      if (pro is String) {
-        Map<String, dynamic> alter = {
-          "all": "$pro",
-        };
-        response.data['pronunciation'] = alter;
-      }
 
       WordJson results = WordJson.fromJson(response.data);
       return results;

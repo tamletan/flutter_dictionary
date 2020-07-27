@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_dictionary/src/resources/repository.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -82,7 +83,10 @@ class DatabaseHelper {
 
   WordDB getWord(String word) {
     for (WordDB i in _list) {
-      if (i.word == word) return i;
+      if (i.word == word) {
+        repository.word_recent = i;
+        return i;
+      };
     }
     return null;
   }
