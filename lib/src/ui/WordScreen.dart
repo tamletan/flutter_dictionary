@@ -30,10 +30,10 @@ class _WordScreenState extends State<WordScreen> {
     return StreamBuilder(
         stream: wordBloc.getWord,
         builder: (context, AsyncSnapshot<WordJson> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: CircularProgressIndicator());
           if (snapshot.hasError)
             return Text(snapshot.error.toString());
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return Center(child: CircularProgressIndicator());
           return buildListView(snapshot);
         });
   }

@@ -47,6 +47,7 @@ class SearchBarState extends State<SearchBar> {
         controller: _wordSearchBloc.textController,
         focusNode: this._focusNode,
         autocorrect: false,
+        autofocus: false,
         onChanged: (text) => _wordSearchBloc.add(TextChanged(query: text)),
         style: _style,
         decoration: InputDecoration(
@@ -84,7 +85,7 @@ class SearchBarState extends State<SearchBar> {
               if (state is SearchStateSuccess &&
                   state.items.results.data.isNotEmpty)
                 return LimitedBox(
-                    maxHeight: 58 * 4 + 10.0,
+                    maxHeight: 58.0 * 4 + 10.0,
                     child: buildListResult(state.items.results.data));
               return SizedBox();
             },
