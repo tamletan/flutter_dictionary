@@ -3,26 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../blocs/home_bloc.dart';
 import '../blocs/word_search_bloc.dart';
 import 'SearchBar.dart' show SearchBar;
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class HomeScreen extends StatefulWidget {
   final String title;
 
+  HomeScreen({Key key, this.title}) : super(key: key);
+
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _HomeScreenState createState() => new _HomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   final textController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    homeBloc.fetchWordBloc();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
             ),
-            onTap: () => Navigator.pushNamed(context, '/favor'),
+            onTap: () => Navigator.pushNamed(context, 'fav'),
           ),
         )
       ],

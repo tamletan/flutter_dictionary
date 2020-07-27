@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'ui/FavorWordScreen.dart';
+import 'models/router.dart';
 import 'ui/HomeScreen.dart';
 import 'ui/NoPage.dart';
-import 'ui/WordScreen.dart';
 
 class App extends StatelessWidget {
   @override
@@ -24,29 +23,8 @@ class App extends StatelessWidget {
         primaryColorDark: const Color(0xFF167F67),
         accentColor: const Color(0xFFFFAD32),
       ),
-      home: SafeArea(child: MyHomePage(title: 'Flutter Database')),
-      initialRoute: '/',
-      // ignore: missing_return
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case '/':
-            return CupertinoPageRoute(
-                builder: (_) =>
-                    SafeArea(child: MyHomePage(title: 'Flutter Database')),
-                settings: settings);
-            break;
-          case '/favor':
-            return CupertinoPageRoute(
-                builder: (_) => SafeArea(child: FavorWordScreen()),
-                settings: settings);
-            break;
-          case '/word':
-            return CupertinoPageRoute(
-                builder: (_) => SafeArea(child: WordScreen()),
-                settings: settings);
-            break;
-        }
-      },
+      initialRoute: 'home',
+      onGenerateRoute: FluroRouter.router.generator,
       onUnknownRoute: (settings) {
         return CupertinoPageRoute(
             builder: (_) => SafeArea(child: NoPage()), settings: settings);

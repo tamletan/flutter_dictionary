@@ -7,6 +7,10 @@ import '../blocs/word_bloc.dart';
 import '../models/word_json.dart' show WordJson;
 
 class WordScreen extends StatefulWidget {
+  final String word;
+
+  WordScreen({Key key, this.word}) : super(key: key);
+
   @override
   _WordScreenState createState() => _WordScreenState();
 }
@@ -14,20 +18,11 @@ class WordScreen extends StatefulWidget {
 class _WordScreenState extends State<WordScreen> {
   final _biggerFont = TextStyle(fontSize: 18.0);
   final wordBloc = WordBloc();
-  String word;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final Map<String, dynamic> rcvdData =
-        ModalRoute.of(context).settings.arguments;
-    word = rcvdData['word'];
-    wordBloc.fetchWordBloc(word);
+    wordBloc.fetchWordBloc(widget.word);
   }
 
   @override
@@ -35,10 +30,10 @@ class _WordScreenState extends State<WordScreen> {
     return StreamBuilder(
         stream: wordBloc.getWord,
         builder: (context, AsyncSnapshot<WordJson> snapshot) {
-          if (snapshot.hasError)
-            return Text(snapshot.error.toString());
           if (snapshot.connectionState == ConnectionState.waiting)
             return Center(child: CircularProgressIndicator());
+          if (snapshot.hasError)
+            return Text(snapshot.error.toString());
           return buildListView(snapshot);
         });
   }
@@ -50,7 +45,8 @@ class _WordScreenState extends State<WordScreen> {
         bool a = repository.dbHelper.contains(snapshot.data.word);
         if (!a && snapshot.data.isFavor) repository.saveWordToDB(w);
         if (a && !(snapshot.data.isFavor)) repository.deleteWordsFromDB(w);
-        Navigator.pop(context, snapshot.data);
+
+        Navigator.pop(context, w);
         return true;
       },
       child: Scaffold(
@@ -89,7 +85,6 @@ class _WordScreenState extends State<WordScreen> {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
               height: 5,
-              color: Colors.black,
               thickness: 5,
             ),
         itemCount: snapshot.data.results.length,

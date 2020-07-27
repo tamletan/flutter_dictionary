@@ -41,8 +41,8 @@ class _FavorWordScreenState extends State<FavorWordScreen> {
             title: Text(words[index].word),
             subtitle: Text("/${words[index].pronunciation}/"),
             onTap: () async {
-              await Navigator.pushNamed(context, '/word',
-                  arguments: {'word': '${words[index].word}'});
+              await Navigator.pushNamed(
+                  context, 'word/${words[index].word}');
               homeBloc.fetchWordBloc();
             },
           );

@@ -17,7 +17,6 @@ class SearchBarState extends State<SearchBar> {
   WordSearchBloc _wordSearchBloc;
   final FocusNode _focusNode = FocusNode();
   final _style = TextStyle(color: Colors.white, fontSize: 18);
-
   OverlayEntry _overlayEntry;
 
   @override
@@ -54,7 +53,10 @@ class SearchBarState extends State<SearchBar> {
           prefixIcon: Icon(Icons.search, color: Colors.white),
           suffixIcon: GestureDetector(
             child: Icon(Icons.clear, color: Colors.white),
-            onTap: _onClearTapped,
+            onTap: () {
+              _wordSearchBloc.textController.text = '';
+              _wordSearchBloc.add(TextChanged(query: ''));
+            },
           ),
           border: InputBorder.none,
           hintText: 'Enter a search term',
@@ -62,11 +64,6 @@ class SearchBarState extends State<SearchBar> {
         ),
       ),
     );
-  }
-
-  void _onClearTapped() {
-    _wordSearchBloc.textController.text = '';
-    _wordSearchBloc.add(TextChanged(query: ''));
   }
 
   OverlayEntry _createOverlayEntry() {
@@ -116,8 +113,7 @@ class SearchBarState extends State<SearchBar> {
         leading: Icon(Icons.search, color: Colors.white),
         trailing: buildTrailingIcon(item, context),
         onTap: () async {
-          await Navigator.pushNamed(context, '/word',
-              arguments: {'word': '$item'});
+          await Navigator.pushNamed(context, 'word/$item');
         },
       ),
     );
