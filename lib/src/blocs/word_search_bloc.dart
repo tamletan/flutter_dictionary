@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart' show TextEditingController;
 import 'package:flutter_bloc/flutter_bloc.dart'
     show Bloc, Transition, TransitionFunction;
 import 'package:rxdart/rxdart.dart' show DebounceExtensions;
@@ -9,11 +8,7 @@ import '../models/search/word_search_state.dart';
 import '../resources/repository.dart';
 
 class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
-  final TextEditingController textController;
-
-  WordSearchBloc(this.textController) : super(null);
-
-  WordSearchState get initialState => SearchStateEmpty();
+  WordSearchBloc() : super(SearchStateEmpty());
 
 //  @override
 //  void onTransition(Transition<WordSearchEvent, WordSearchState> transition) {

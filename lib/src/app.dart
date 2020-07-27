@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'models/router.dart';
-import 'ui/HomeScreen.dart';
+import 'models/fluro_router.dart';
 import 'ui/NoPage.dart';
 
 class App extends StatelessWidget {
