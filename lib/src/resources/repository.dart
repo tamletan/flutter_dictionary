@@ -48,5 +48,3 @@ class Repository {
   }
 }
 
-final repository =
-    Repository(WordApiProvider(), SearchCache(), DatabaseHelper());

@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart' show Dio;
-import 'package:flutter_dictionary/src/models/database/word_db.dart';
-import 'package:flutter_dictionary/src/resources/repository.dart';
 
+import '../models/database/word_db.dart';
 import '../models/search/search_detail.dart' show SearchJson;
 import '../models/word_json.dart' show WordJson;
+import '../resources/repository.dart';
+import '../resources/service_locator.dart';
 import 'utils.dart';
 
 class WordApiProvider {
@@ -23,7 +24,7 @@ class WordApiProvider {
         Map<String, dynamic> alter = {"all": "$pro"};
         response.data['pronunciation'] = alter;
       }
-      repository.word_recent = WordDB(
+      getIt.get<Repository>().word_recent = WordDB(
           word: response.data['word'],
           pronunciation: json.encode(response.data['pronunciation']),
           results: response.data['results'] == null

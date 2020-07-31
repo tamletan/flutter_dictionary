@@ -6,6 +6,7 @@ import '../models/search/search_result_error.dart';
 import '../models/search/word_search_event.dart';
 import '../models/search/word_search_state.dart';
 import '../resources/repository.dart';
+import '../resources/service_locator.dart';
 
 class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
   WordSearchBloc() : super(SearchStateEmpty());
@@ -37,7 +38,8 @@ class WordSearchBloc extends Bloc<WordSearchEvent, WordSearchState> {
       } else {
         yield SearchStateLoading();
         try {
-          final results = await repository.searchWordAPI(searchTerm);
+          final results =
+              await getIt<Repository>().searchWordAPI(searchTerm);
           yield SearchStateSuccess(results);
         } catch (error) {
           yield error is SearchResultError

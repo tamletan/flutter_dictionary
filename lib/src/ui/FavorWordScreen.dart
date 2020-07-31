@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../blocs/home_bloc.dart';
 import '../models/database/word_db.dart';
+import '../resources/service_locator.dart';
 
 class FavorWordScreen extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class _FavorWordScreenState extends State<FavorWordScreen> {
   @override
   void initState() {
     super.initState();
-    homeBloc.fetchWordBloc();
+    getIt<HomeBloc>().fetchWordBloc();
   }
 
   @override
@@ -23,7 +24,7 @@ class _FavorWordScreenState extends State<FavorWordScreen> {
         title: Text("Favorite"),
       ),
       body: StreamBuilder(
-          stream: homeBloc.getWord,
+          stream: getIt<HomeBloc>().getWord,
           builder: (context, snapshot) {
             if (snapshot.hasError) print(snapshot.error);
             return snapshot.hasData
@@ -41,9 +42,8 @@ class _FavorWordScreenState extends State<FavorWordScreen> {
             title: Text(words[index].word),
             subtitle: Text("/${words[index].pronunciation}/"),
             onTap: () async {
-              await Navigator.pushNamed(
-                  context, 'word/${words[index].word}');
-              homeBloc.fetchWordBloc();
+              await Navigator.pushNamed(context, 'word/${words[index].word}');
+              getIt<HomeBloc>().fetchWordBloc();
             },
           );
         });

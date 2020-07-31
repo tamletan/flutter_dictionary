@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dictionary/src/models/database/word_db.dart';
-import 'package:flutter_dictionary/src/resources/repository.dart';
 
 import '../blocs/word_bloc.dart';
+import '../models/database/word_db.dart';
 import '../models/word_json.dart' show WordJson;
+import '../resources/repository.dart';
+import '../resources/service_locator.dart';
 
 class WordScreen extends StatefulWidget {
   final String word;
@@ -30,8 +31,7 @@ class _WordScreenState extends State<WordScreen> {
     return StreamBuilder(
         stream: wordBloc.getWord,
         builder: (context, AsyncSnapshot<WordJson> snapshot) {
-          if (snapshot.hasError)
-            return Text(snapshot.error.toString());
+          if (snapshot.hasError) return Text(snapshot.error.toString());
           if (snapshot.connectionState == ConnectionState.waiting)
             return Center(child: CircularProgressIndicator());
           return buildListView(snapshot);
@@ -42,9 +42,11 @@ class _WordScreenState extends State<WordScreen> {
     return WillPopScope(
       onWillPop: () async {
         WordDB w = WordDB.cast(snapshot.data);
-        bool a = repository.dbHelper.contains(snapshot.data.word);
-        if (!a && snapshot.data.isFavor) repository.saveWordToDB(w);
-        if (a && !(snapshot.data.isFavor)) repository.deleteWordsFromDB(w);
+        bool a = getIt<Repository>().dbHelper.contains(snapshot.data.word);
+        if (!a && snapshot.data.isFavor)
+          getIt<Repository>().saveWordToDB(w);
+        if (a && !(snapshot.data.isFavor))
+          getIt<Repository>().deleteWordsFromDB(w);
 
         Navigator.pop(context, w);
         return true;
